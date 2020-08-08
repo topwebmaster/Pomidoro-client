@@ -2,12 +2,21 @@
 import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
 import AsyncStorage from "@react-native-community/async-storage"
+import { RegisterDataType } from "~/Redux/Reducers/Helpers/Types"
 import axios from "axios"
-import { GetSMSVerificationCodeThunkCreator } from "~/Redux/Reducers/AuthReducers/AuthGetReducer"
 
 ////////////////////////////////////////////////////////////////////////
 
-let initialState = {}
+let initialState = {
+  registerData: {
+    name: null as string | null,
+    phoneNum: null as string | null,
+    password: null as string | null,
+    email: null as string | null,
+  } as RegisterDataType,
+
+  SMSVerificationStatus: false as boolean,
+}
 
 export type initialStateType = typeof initialState
 
@@ -18,6 +27,20 @@ const AuthSetReducer = (
   state = initialState,
   action: ActionsTypes
 ): initialStateType => {
+  if (action.type === "SET_REGISTER_DATA") {
+    return {
+      ...state,
+      registerData: action.registerData,
+    }
+  }
+
+  if (action.type === "SET_SMS_VERIFICATION_STATUS") {
+    return {
+      ...state,
+      SMSVerificationStatus: action.SMSVerificationStatus,
+    }
+  }
+
   return state
 }
 
@@ -27,11 +50,24 @@ export default AuthSetReducer
 type ActionsTypes = InferActionsTypes<typeof ActionCreatorsList>
 
 //    *ACTION CREATORS*   //
-export const ActionCreatorsList = {}
+export const ActionCreatorsList = {
+  setRegisterDataActionCreator: (registerData: RegisterDataType) =>
+    ({
+      type: "SET_REGISTER_DATA",
+      registerData,
+    } as const),
+
+  setSMSVerificationStatusActionCreator: (SMSVerificationStatus: boolean) =>
+    ({
+      type: "SET_SMS_VERIFICATION_STATUS",
+      SMSVerificationStatus,
+    } as const),
+}
 
 //    *THUNKS*   //
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
+// REGISTER REDUCERS
 // Register user
 export const sendRegisterDataThunkCreator = (
   name: string,
@@ -40,27 +76,44 @@ export const sendRegisterDataThunkCreator = (
   email?: string
 ): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios
-      .post("http://138.201.153.220/api/redoc/#operation/user_create", {
-        name: name,
-        email: email,
-        phone_num: phoneNum,
-        password: password,
+    dispatch(
+      ActionCreatorsList.setRegisterDataActionCreator({
+        name,
+        phoneNum,
+        password,
+        email,
       })
-      .then((res: any) => {
-        console.log(res)
-        dispatch(GetSMSVerificationCodeThunkCreator())
-      })
+    )
+    dispatch(sendPhoneNumToVerifyThunkCreator(phoneNum))
   }
 }
 
-// Register user
-export const registerUserThunkCreator = (): ThunkType => {
+// Send phone num to verify
+export const sendPhoneNumToVerifyThunkCreator = (
+  phoneNum: string
+): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.post(" ", {})
+    await axios.post("http://138.201.153.220/api/passcode/obtain/", {
+      phone: phoneNum,
+    })
   }
 }
 
+// Verify sms code
+export const verifySMSCodeThunkCreator = (code: string): ThunkType => {
+  return async (dispatch, getState: any) => {
+    const state = getState()
+
+    await axios
+      .post("http://138.201.153.220/passcode/verify/", {
+        phone: state.AuthSetState.registerData.phoneNum,
+        passcode: code,
+      })
+      .then(() => {})
+  }
+}
+
+// LOGIN REDUCERS
 // Login user
 export const LoginUserThunkCreator = (
   phoneNum: string,

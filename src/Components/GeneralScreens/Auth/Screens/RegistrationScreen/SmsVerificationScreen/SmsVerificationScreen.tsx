@@ -14,32 +14,32 @@ import Button from "~/Components/Shared/Components/Button/Button"
 
 type PropsType = {
   navigation: any
-  SMSVerificationCode: string
+  SMSVerificationStatus: string
 
-  registerUserThunkCreator: () => any
+  verifySMSCodeThunkCreator: (code: string) => any
 }
 
 const SmsVerificationScreen: React.FC<PropsType> = (props) => {
-  const [value, setValue] = useState("" as string)
+  const [code, setCode] = useState("" as string)
   const [wrongPass, setWrongPass] = useState(false as boolean)
   const { t } = useTranslation()
 
   useEffect(() => {
     setWrongPass(false)
-    if (value.length > 4) {
-      setValue(value.slice(0, 1))
+    if (code.length > 4) {
+      setCode(code.slice(0, 1))
     }
-  }, [value])
+  }, [code])
 
   const VerifyCode = () => {
-    if (props.SMSVerificationCode === value) {
-      props.registerUserThunkCreator().then(() => {
-        props.navigation.navigate("RegistrationSuccesfulScreen")
-      })
-    } else {
-      setWrongPass(true)
-    }
+    props.verifySMSCodeThunkCreator(code)
   }
+
+  useEffect(() => {
+    if (props.SMSVerificationStatus) {
+      props.navigation.navigate("RegistrationSuccesfulScreen")
+    }
+  }, [props.SMSVerificationStatus])
 
   return (
     <View style={styles.container}>
@@ -49,11 +49,11 @@ const SmsVerificationScreen: React.FC<PropsType> = (props) => {
         label={t("Auth.RegisterScreen.SmsVerificationScreen.ВведитеСМСКод")}
         theme={{ colors: { primary: "#96A637" } }}
         keyboardType={"numeric"}
-        value={value}
+        value={code}
         onChangeText={(text: string) =>
-          value.length >= 4 && text.length >= value.length
+          code.length >= 4 && text.length >= code.length
             ? undefined
-            : setValue(text)
+            : setCode(text)
         }
       />
       {wrongPass && (

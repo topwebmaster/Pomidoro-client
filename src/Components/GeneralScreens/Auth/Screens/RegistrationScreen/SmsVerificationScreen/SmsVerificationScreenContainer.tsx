@@ -1,5 +1,4 @@
 // PLUGINS IMPORTS //
-import React from "react"
 import { compose } from "redux"
 import { connect } from "react-redux"
 
@@ -8,18 +7,18 @@ import SmsVerificationScreen from "./SmsVerificationScreen"
 
 // EXTRA IMPORTS //
 import { AppStateType } from "~/Redux/ReduxStore"
-import { registerUserThunkCreator } from "~/Redux/Reducers/AuthReducers/AuthSetReducer"
+import { verifySMSCodeThunkCreator } from "~/Redux/Reducers/AuthReducers/AuthSetReducer"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // TYPES
 type MapStateToPropsType = {
   navigation: any
-  SMSVerificationCode: string
+  SMSVerificationStatus: string
 }
 
 type MapDispatchToPropsType = {
-  registerUserThunkCreator: () => void
+  verifySMSCodeThunkCreator: (code: string) => any
 }
 
 /////////////////////////////////////////////////////////////////
@@ -27,7 +26,7 @@ type MapDispatchToPropsType = {
 const mapStateToProps = (state: any, props: any): MapStateToPropsType => {
   return {
     navigation: props.navigation,
-    SMSVerificationCode: state.AuthGetState.SMSVerificationCode,
+    SMSVerificationStatus: state.AuthSetState.SMSVerificationStatus,
   }
 }
 
@@ -35,7 +34,7 @@ const RegistrationScreenContainer = compose(
   connect<MapStateToPropsType, MapDispatchToPropsType, AppStateType>(
     mapStateToProps,
     {
-      registerUserThunkCreator: registerUserThunkCreator,
+      verifySMSCodeThunkCreator,
     }
   )
 )(SmsVerificationScreen)
