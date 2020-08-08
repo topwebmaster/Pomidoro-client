@@ -1,6 +1,7 @@
 //    *GENERAL IMPORTS*   //
 import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
+import { baseUrl } from "~/Redux/Reducers/Helpers/Info"
 import axios from "axios"
 
 ////////////////////////////////////////////////////////////////////////
@@ -174,7 +175,7 @@ export const SendOrderDataThunkCreator = (): ThunkType => {
     const state = getState()
 
     await axios
-      .post("", {
+      .post(`${baseUrl}`, {
         OrderItemsList: state.OrderingSetState.OrderItemsList,
         OrderBonusesUsed: state.OrderingSetState.OrderBonusesUsed,
         DeliveryTime: state.OrderingSetState.DeliveryTime,

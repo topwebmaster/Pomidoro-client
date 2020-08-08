@@ -3,6 +3,7 @@ import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
 import AsyncStorage from "@react-native-community/async-storage"
 import { RegisterDataType } from "~/Redux/Reducers/Helpers/Types"
+import { baseUrl } from "~/Redux/Reducers/Helpers/Info"
 import axios from "axios"
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,7 +95,7 @@ export const sendPhoneNumToVerifyThunkCreator = (
 ): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
-      .post("http://138.201.153.220/api/passcode/obtain/", {
+      .post(`${baseUrl}/passcode/obtain/`, {
         phone: phoneNum,
       })
       .then((res) => {
@@ -109,7 +110,7 @@ export const verifySMSCodeThunkCreator = (code: string): ThunkType => {
     const state = getState()
 
     await axios
-      .post("http://138.201.153.220/passcode/verify/", {
+      .post(`${baseUrl}/passcode/verify/`, {
         phone: state.AuthSetState.registerData.phoneNum,
         passcode: code,
       })
@@ -125,7 +126,7 @@ export const LoginUserThunkCreator = (
 ): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
-      .post("http://138.201.153.220/api/auth/login/", {
+      .post(`${baseUrl}/auth/login/`, {
         username: "PomAdmin",
         password: "Bi647MhCFcjX",
       })
@@ -138,6 +139,6 @@ export const LoginUserThunkCreator = (
 // Logout user
 export const LogoutUserThunkCreator = (): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.post("", {}).then((res: any) => {})
+    await axios.post(`${baseUrl}`, {}).then((res: any) => {})
   }
 }

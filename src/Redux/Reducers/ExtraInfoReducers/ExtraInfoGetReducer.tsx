@@ -1,6 +1,7 @@
 //    *GENERAL IMPORTS*   //
 import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
+import { baseUrl } from "~/Redux/Reducers/Helpers/Info"
 import axios from "axios"
 
 ////////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 // Get sales list
 export const getSalesListThunkCreator = (): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.get(" ").then((res: any) => {
+    await axios.get(`${baseUrl}`).then((res: any) => {
       dispatch(ActionCreatorsList.setSalesListActionCreator(res.data))
     })
   }

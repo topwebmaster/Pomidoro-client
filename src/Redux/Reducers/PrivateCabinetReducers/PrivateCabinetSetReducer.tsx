@@ -1,6 +1,7 @@
 //    *GENERAL IMPORTS*   //
 import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
+import { baseUrl } from "~/Redux/Reducers/Helpers/Info"
 import axios from "axios"
 
 ////////////////////////////////////////////////////////////////////////
@@ -38,7 +39,7 @@ export const ConnectCreditCardThunkCreator = (
 ): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
-      .post("", {
+      .post(`${baseUrl}`, {
         credit_card_num: cardNum,
         CVV: CVV,
         exp_date: ExpDate,
@@ -50,13 +51,13 @@ export const ConnectCreditCardThunkCreator = (
 // Update avatar
 export const UpdateAvatarThunkCreator = (avatar: Blob): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.post("", { avatar: avatar }).then((res: any) => {})
+    await axios.post(`${baseUrl}`, { avatar: avatar }).then((res: any) => {})
   }
 }
 
 // Add adress
 export const addAdressThunkCreator = (adress: string): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.post("", { adress: adress }).then((res: any) => {})
+    await axios.post(`${baseUrl}`, { adress: adress }).then((res: any) => {})
   }
 }

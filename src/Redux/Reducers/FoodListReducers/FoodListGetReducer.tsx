@@ -1,6 +1,7 @@
 //    *GENERAL IMPORTS*   //
 import { ThunkAction } from "redux-thunk"
 import { AppStateType, InferActionsTypes } from "../../ReduxStore"
+import { baseUrl } from "~/Redux/Reducers/Helpers/Info"
 import axios from "axios"
 
 ////////////////////////////////////////////////////////////////////////
@@ -62,12 +63,10 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 // Get menus list
 export const getMenuListThunkCreator = (): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios
-      .get("http://138.201.153.220/api/menu_group/")
-      .then((res: any) => {
-        console.log(res)
-        dispatch(ActionCreatorsList.setMenuListActionCreator(res.data))
-      })
+    await axios.get(`${baseUrl}/menu_group/`).then((res: any) => {
+      console.log(res)
+      dispatch(ActionCreatorsList.setMenuListActionCreator(res.data))
+    })
   }
 }
 
@@ -78,7 +77,7 @@ export const getCertainCategoryFoodsListThunkCreator = (
 ): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
-      .get(`http://138.201.153.220/api/menu/?group_id=${rawId}`)
+      .get(`${baseUrl}/menu/?group_id=${rawId}`)
       .then((res: any) => {
         console.log(res.data)
         dispatch(
