@@ -81,19 +81,8 @@ const LoginScreen: React.FC<PropsType> = (props) => {
             <Button
               text={t("Auth.LoginScreen.Войти")}
               onPress={FormikProps.handleSubmit}
-              buttonStyle={{
-                alignSelf: null,
-                marginTop: 5,
-                height: 50,
-                width: 315,
-                borderRadius: 6,
-                backgroundColor: "#96A637",
-              }}
-              textStyle={{
-                color: "white",
-                fontSize: 16,
-                letterSpacing: 0.3,
-              }}
+              buttonStyle={styles.login_button}
+              textStyle={styles.login_button_text}
             />
           </>
         )}
@@ -109,18 +98,8 @@ const LoginScreen: React.FC<PropsType> = (props) => {
       <Button
         text={t("Auth.RegisterScreen.Регистрация")}
         onPress={() => props.navigation.navigate("RegistrationScreen")}
-        buttonStyle={{
-          marginTop: 235,
-          alignSelf: null,
-          height: 50,
-          width: 315,
-          borderRadius: 6,
-        }}
-        textStyle={{
-          color: "black",
-          fontSize: 16,
-          letterSpacing: 0.3,
-        }}
+        buttonStyle={styles.button}
+        textStyle={styles.button_text}
       />
     </View>
   )
@@ -176,6 +155,32 @@ const styles = StyleSheet.create({
 
   subtitle: {
     marginLeft: -30,
+    letterSpacing: 0.3,
+  },
+
+  login_button: {
+    marginTop: 5,
+    height: 50,
+    width: 315,
+    borderRadius: 6,
+    backgroundColor: "#96A637",
+  },
+
+  login_button_text: {
+    color: "white",
+    fontSize: 16,
+    letterSpacing: 0.3,
+  },
+
+  button: {
+    marginTop: "55%",
+    height: 50,
+    width: 315,
+    borderRadius: 6,
+  },
+
+  button_text: {
+    fontSize: 16,
     letterSpacing: 0.3,
   },
 })

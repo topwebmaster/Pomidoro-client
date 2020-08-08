@@ -93,9 +93,13 @@ export const sendPhoneNumToVerifyThunkCreator = (
   phoneNum: string
 ): ThunkType => {
   return async (dispatch, getState: any) => {
-    await axios.post("http://138.201.153.220/api/passcode/obtain/", {
-      phone: phoneNum,
-    })
+    await axios
+      .post("http://138.201.153.220/api/passcode/obtain/", {
+        phone: phoneNum,
+      })
+      .then((res) => {
+        console.log(res)
+      })
   }
 }
 
