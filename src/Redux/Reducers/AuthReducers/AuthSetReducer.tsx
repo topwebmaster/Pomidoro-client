@@ -24,10 +24,7 @@ export type initialStateType = typeof initialState
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //    *REDUCER*   //
-const AuthSetReducer = (
-  state = initialState,
-  action: ActionsTypes
-): initialStateType => {
+const AuthSetReducer = (state = initialState, action: ActionsTypes): initialStateType => {
   if (action.type === "SET_REGISTER_DATA") {
     return {
       ...state,
@@ -90,12 +87,10 @@ export const sendRegisterDataThunkCreator = (
 }
 
 // Send phone num to verify
-export const sendPhoneNumToVerifyThunkCreator = (
-  phoneNum: string
-): ThunkType => {
+export const sendPhoneNumToVerifyThunkCreator = (phoneNum: string): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
-      .post(`${baseUrl}/passcode/obtain/`, {
+      .post(`${baseUrl}/user/passcode/send_sms/`, {
         phone: phoneNum,
       })
       .then((res) => {
@@ -110,20 +105,19 @@ export const verifySMSCodeThunkCreator = (code: string): ThunkType => {
     const state = getState()
 
     await axios
-      .post(`${baseUrl}/passcode/verify/`, {
+      .post(`${baseUrl}/user/passcode/phone_verification/`, {
         phone: state.AuthSetState.registerData.phoneNum,
         passcode: code,
       })
-      .then(() => {})
+      .then((res) => {
+        console.log(res)
+      })
   }
 }
 
 // LOGIN REDUCERS
 // Login user
-export const LoginUserThunkCreator = (
-  phoneNum: string,
-  password: string
-): ThunkType => {
+export const LoginUserThunkCreator = (phoneNum: string, password: string): ThunkType => {
   return async (dispatch, getState: any) => {
     await axios
       .post(`${baseUrl}/auth/login/`, {
